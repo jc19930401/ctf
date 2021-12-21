@@ -1,0 +1,2 @@
+use binwalk to get the flag hidden in .jpg
+$binwalk -e -M xxx.jpg
