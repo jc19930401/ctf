@@ -1,0 +1,51 @@
+You have to know the BMP file format, see wiki.
+https://en.wikipedia.org/wiki/BMP_file_format
+
+
+And you can see
+
+[Bitmap File Header]
+42 4d is BMP Signature
+8e 26 2c 00 is File size
+00 00       is Reserved1
+00 00       is Reserved2
+ba d0 00 00 is File offset to PixelArray 
+[BID Header]
+ba d0 00 00 is DIB Header Size
+..
+..
+..
+..
+
+
+And for now the common Windows format is the BITMAPINFOHEADER header, this size is 40 (0x28).
+So, the offset for PixelArray is 14(bitmap file header) + 40(BID header) = 54 (0x36)
+
+Next,use hexeditor to  change the hex value 
+ba d0 00 00 to 36 00 00 00 (file offset of pixelarray)
+ba d0 00 00 to 28 00 00 00 (BID header size)
+
+You can see the picture, but there is no flag....
+
+
+
+See the picture properties, the file size of picture is 2893454 bytes, and the image size is 1134 x 306 pixels.
+
+Next, you can see
+[BID Header]
+6e 04 00 00 is Image Width, 1134(0x46e)
+32 01 00 00 is Image Height, 306(0x132)
+01 00       is Planes
+18 00       is Bits per pixel 24(0x18)
+
+So, the pixel size of picture is 2893454bytes - 54bytes = 2893400bytes.
+And RowSize(bytes) = Floor[(BitsPerPixelxImageWidth+31)/32]x4 = Floor[(24x1134+31)/32]x4 = Floor[27247/32]x4 = 851x4 = 3404
+
+And we can got the true height, 2893400 / 3404 = 850 !!
+Use hexeditor to change the hex vaule
+32 01 00 00 to 52 03 00 00 (Image Height, 0x352 = 850)
+
+
+You got the flag !
+
+
